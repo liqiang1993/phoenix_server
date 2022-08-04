@@ -1,8 +1,8 @@
 package gredis
 
 import (
-	"entry-task-rpc/pkg/log"
-	"entry-task-rpc/pkg/setting"
+	"github.com/lucky-cheerful-man/phoenix_server/pkg/log"
+	"github.com/lucky-cheerful-man/phoenix_server/pkg/setting"
 
 	"time"
 

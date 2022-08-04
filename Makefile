@@ -13,7 +13,7 @@ lint:
 	golint ./...
 
 clean:
-	rm -rf entry-task-rpc
+	rm -rf github.com/lucky-cheerful-man/phoenix_server
 	go clean -i .
 
 help:

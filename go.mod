@@ -1,4 +1,4 @@
-module phoenix_server
+module github.com/lucky-cheerful-man/phoenix_server
 
 go 1.18
 

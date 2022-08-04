@@ -1,12 +1,12 @@
 package gmysql
 
 import (
-	"entry-task-rpc/pkg/log"
-	"entry-task-rpc/pkg/setting"
-	"entry-task-rpc/pkg/util"
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm" //nolint:goimports
+	"github.com/lucky-cheerful-man/phoenix_server/pkg/log"
+	"github.com/lucky-cheerful-man/phoenix_server/pkg/setting"
+	"github.com/lucky-cheerful-man/phoenix_server/pkg/util"
 	"time"
 )
 

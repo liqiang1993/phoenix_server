@@ -1,13 +1,13 @@
 package main
 
 import (
-	"entry-task-rpc/pkg/gmysql"
-	"entry-task-rpc/pkg/gredis"
-	"entry-task-rpc/pkg/log"
-	"entry-task-rpc/pkg/rpc"
-	"entry-task-rpc/pkg/setting"
-	"entry-task-rpc/service"
 	"fmt"
+	"github.com/lucky-cheerful-man/phoenix_server/pkg/gmysql"
+	"github.com/lucky-cheerful-man/phoenix_server/pkg/gredis"
+	"github.com/lucky-cheerful-man/phoenix_server/pkg/log"
+	"github.com/lucky-cheerful-man/phoenix_server/pkg/rpc"
+	"github.com/lucky-cheerful-man/phoenix_server/pkg/setting"
+	"github.com/lucky-cheerful-man/phoenix_server/service"
 	"google.golang.org/grpc" //nolint:goimports
 	"net"
 	"os"

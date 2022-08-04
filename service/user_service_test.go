@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"entry-task-rpc/pkg/rpc"
+	"github.com/lucky-cheerful-man/phoenix_server/pkg/rpc"
 	"testing"
 
 	"github.com/stretchr/testify/mock" //nolint:goimports

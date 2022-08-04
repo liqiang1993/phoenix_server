@@ -1,7 +1,7 @@
 package log
 
 import (
-	"entry-task-rpc/pkg/setting"
+	"github.com/lucky-cheerful-man/phoenix_server/pkg/setting"
 
 	"github.com/sirupsen/logrus"
 	"gopkg.in/natefinch/lumberjack.v2"
