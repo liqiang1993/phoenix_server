@@ -2,6 +2,7 @@ package gmysql
 
 import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"time"
 )
 
 type DBInterface interface {
@@ -11,11 +12,11 @@ type DBInterface interface {
 	EditProfile(name, path, nickname string) error
 }
 
-type User struct {
-	Name       string `json:"name"`
-	Password   string `json:"password"`
-	Nickname   string `json:"nickname"`
-	ImagePath  string `json:"image_path"`
-	CreateTime string `json:"create_time"`
-	UpdateTime string `json:"update_time"`
+type UserInfoTab struct {
+	UserName    string    `json:"user_name"`
+	Password    string    `json:"password"`
+	NickName    string    `json:"nick_name"`
+	Image       string    `json:"image"`
+	GmtCreated  time.Time `json:"gmt_created"`
+	GmtModified time.Time `json:"gmt_modified"`
 }
