@@ -13,25 +13,25 @@ import (
 func Setup() *Mysql {
 	var MysqlOperate Mysql
 
-	db, err := gorm.Open(setting.DatabaseSetting.Type, fmt.Sprintf(
+	db, err := gorm.Open(setting.ReferGlobalConfig().DatabaseSetting.Type, fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		setting.DatabaseSetting.User,
-		setting.DatabaseSetting.Password,
-		setting.DatabaseSetting.Host,
-		setting.DatabaseSetting.Name))
+		setting.ReferGlobalConfig().DatabaseSetting.User,
+		setting.ReferGlobalConfig().DatabaseSetting.Password,
+		setting.ReferGlobalConfig().DatabaseSetting.Host,
+		setting.ReferGlobalConfig().DatabaseSetting.Name))
 
 	if err != nil {
 		log.Fatalf("gmysql.Setup err: %s", err)
 	}
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
-		return setting.DatabaseSetting.TablePrefix + defaultTableName
+		return setting.ReferGlobalConfig().DatabaseSetting.TablePrefix + defaultTableName
 	}
 
 	db.SingularTable(true)
-	db.DB().SetMaxIdleConns(setting.DatabaseSetting.MaxIdleConn)
-	db.DB().SetMaxOpenConns(setting.DatabaseSetting.MaxOpenConn)
-	db.DB().SetConnMaxLifetime(time.Minute * time.Duration(setting.DatabaseSetting.ConnMaxLifeMinute))
+	db.DB().SetMaxIdleConns(setting.ReferGlobalConfig().DatabaseSetting.MaxIdleConn)
+	db.DB().SetMaxOpenConns(setting.ReferGlobalConfig().DatabaseSetting.MaxOpenConn)
+	db.DB().SetConnMaxLifetime(time.Minute * time.Duration(setting.ReferGlobalConfig().DatabaseSetting.ConnMaxLifeMinute))
 	MysqlOperate.db = db
 
 	return &MysqlOperate

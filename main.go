@@ -13,17 +13,13 @@ import (
 )
 
 func main() {
-	// 初始化配置与日志
-	setting.InitConfig()
-	log.InitLog()
-
 	etcdReg := etcd.NewRegistry(
-		registry.Addrs("127.0.0.1:2379"),
+		registry.Addrs(setting.ReferGlobalConfig().ServerSetting.RegisterAddress),
 	)
 	// 初始化服务
 	srv := goMirco.NewService(
-		goMirco.Name("phoenix_server"),
-		goMirco.Version("latest"),
+		goMirco.Name(setting.ReferGlobalConfig().ServerSetting.RegisterServerName),
+		goMirco.Version(setting.ReferGlobalConfig().ServerSetting.RegisterServerVersion),
 		goMirco.Registry(etcdReg),
 	)
 

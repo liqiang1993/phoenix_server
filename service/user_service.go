@@ -30,7 +30,7 @@ type UserInfo struct {
 
 // Register 注册接口
 func (u *UserService) Register(_ context.Context, in *pb.RegisterRequest, _ *pb.RegisterResponse) error {
-	password := util.EncodeMD5(in.Password + setting.AppSetting.Salt)
+	password := util.EncodeMD5(in.Password + setting.ReferGlobalConfig().AppSetting.Salt)
 	err := u.DB.InsertUser(in.Name, password)
 	if err != nil {
 		log.Warnf("%s InsertUser failed, err:%s", in.RequestID, err)
@@ -45,7 +45,7 @@ func (u *UserService) Register(_ context.Context, in *pb.RegisterRequest, _ *pb.
 
 // Auth 登陆认证接口
 func (u *UserService) Auth(_ context.Context, in *pb.AuthRequest, out *pb.AuthResponse) error {
-	password := util.EncodeMD5(in.Password + setting.AppSetting.Salt)
+	password := util.EncodeMD5(in.Password + setting.ReferGlobalConfig().AppSetting.Salt)
 	res, nickname, imagePath, err := u.DB.CheckAuth(in.Name, password)
 	if err != nil || !res {
 		log.Warnf("%s CheckAuth failed, err:%s, res:%v", in.RequestID, err, res)
@@ -88,7 +88,7 @@ func (u *UserService) GetProfile(_ context.Context, in *pb.GetProfileRequest, ou
 
 // GetHeadImage 查询头像图片
 func (u *UserService) GetHeadImage(_ context.Context, in *pb.GetHeadImageRequest, out *pb.GetHeadImageResponse) error {
-	file, err := os.Open(setting.AppSetting.RootPictureDir + in.ImageID)
+	file, err := os.Open(setting.ReferGlobalConfig().AppSetting.RootPictureDir + in.ImageID)
 	if err != nil {
 		log.Warnf("%s open file failed, err:%s", in.RequestID, err)
 		return err
@@ -119,7 +119,7 @@ func (u *UserService) EditProfile(_ context.Context, in *pb.EditProfileRequest, 
 	if len(in.Image) != 0 {
 		// todo 更新图片成功后，需要删除原有的图片
 		imageID = fmt.Sprintf("%d%d", time.Now().UnixNano(), rand.Int()) //nolint:gosec
-		path = setting.AppSetting.RootPictureDir + imageID
+		path = setting.ReferGlobalConfig().AppSetting.RootPictureDir + imageID
 		err = ioutil.WriteFile(path, in.Image, 0644) //nolint:gomnd,gosec
 		if err != nil {
 			log.Warnf("%s write file failed, err:%s", in.RequestID, err)
@@ -154,7 +154,7 @@ func (u *UserService) setCacheInfo(requestID string, name string, nickname strin
 	}
 	res, err := json.Marshal(userInfo)
 	if err == nil {
-		err = u.Cache.Set(name, res, setting.RedisSetting.ExpireTimeSecond)
+		err = u.Cache.Set(name, res, setting.ReferGlobalConfig().RedisSetting.ExpireTimeSecond)
 		if err != nil {
 			log.Warnf("%s set cache failed:%s, name:%s, res:%s", requestID, err, name, string(res))
 		}

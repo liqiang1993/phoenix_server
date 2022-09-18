@@ -20,13 +20,11 @@ type App struct {
 	LogCompress   bool   // 是否压缩日志，默认是不压缩。这里设置为true，压缩日志
 }
 
-var AppSetting = &App{}
-
 type Server struct {
-	Port int
+	RegisterAddress       string
+	RegisterServerName    string
+	RegisterServerVersion string
 }
-
-var ServerSetting = &Server{}
 
 type Database struct {
 	Type              string
@@ -40,8 +38,6 @@ type Database struct {
 	ConnMaxLifeMinute int
 }
 
-var DatabaseSetting = &Database{}
-
 type Redis struct {
 	Host             string
 	Password         string
@@ -51,32 +47,43 @@ type Redis struct {
 	ExpireTimeSecond int
 }
 
-var RedisSetting = &Redis{}
+type GlobalConfig struct {
+	cfg             *ini.File
+	AppSetting      App
+	ServerSetting   Server
+	DatabaseSetting Database
+	RedisSetting    Redis
+}
 
-var cfg *ini.File
+var globalConfig *GlobalConfig
 
 // InitConfig 初始化配置内容
-func InitConfig() {
+func init() {
 	var err error
-	cfg, err = ini.Load("conf/app.ini")
+	globalConfig = new(GlobalConfig)
+	globalConfig.cfg, err = ini.Load("conf/app.ini")
 	if err != nil {
 		fmt.Printf("setting.Setup, fail to parse 'conf/app.ini': %s", err)
 		panic("load config failed")
 	}
 
-	mapTo("app", AppSetting)
-	mapTo("server", ServerSetting)
-	mapTo("database", DatabaseSetting)
-	mapTo("redis", RedisSetting)
+	mapTo("app", globalConfig.AppSetting)
+	mapTo("server", globalConfig.ServerSetting)
+	mapTo("database", globalConfig.DatabaseSetting)
+	mapTo("redis", globalConfig.RedisSetting)
 
-	RedisSetting.IdleTimeout *= time.Second
+	globalConfig.RedisSetting.IdleTimeout *= time.Second
 }
 
 // mapTo map section
 func mapTo(section string, v interface{}) {
-	err := cfg.Section(section).MapTo(v)
+	err := globalConfig.cfg.Section(section).MapTo(v)
 	if err != nil {
 		fmt.Printf("cfg.MapTo %s err: %s", section, err)
 		panic("get filed failed")
 	}
+}
+
+func ReferGlobalConfig() *GlobalConfig {
+	return globalConfig
 }

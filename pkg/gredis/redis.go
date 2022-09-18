@@ -19,16 +19,16 @@ type CacheInterface interface {
 func Setup() *RedisOperate {
 	op := new(RedisOperate)
 	Conn := &redis.Pool{
-		MaxIdle:     setting.RedisSetting.MaxIdle,
-		MaxActive:   setting.RedisSetting.MaxActive,
-		IdleTimeout: setting.RedisSetting.IdleTimeout,
+		MaxIdle:     setting.ReferGlobalConfig().RedisSetting.MaxIdle,
+		MaxActive:   setting.ReferGlobalConfig().RedisSetting.MaxActive,
+		IdleTimeout: setting.ReferGlobalConfig().RedisSetting.IdleTimeout,
 		Dial: func() (redis.Conn, error) {
-			c, err := redis.Dial("tcp", setting.RedisSetting.Host)
+			c, err := redis.Dial("tcp", setting.ReferGlobalConfig().RedisSetting.Host)
 			if err != nil {
 				return nil, err
 			}
-			if setting.RedisSetting.Password != "" {
-				if _, err := c.Do("AUTH", setting.RedisSetting.Password); err != nil {
+			if setting.ReferGlobalConfig().RedisSetting.Password != "" {
+				if _, err := c.Do("AUTH", setting.ReferGlobalConfig().RedisSetting.Password); err != nil {
 					_ = c.Close()
 					return nil, err
 				}
