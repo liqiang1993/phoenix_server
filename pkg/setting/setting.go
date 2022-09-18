@@ -67,10 +67,10 @@ func init() {
 		panic("load config failed")
 	}
 
-	mapTo("app", globalConfig.AppSetting)
-	mapTo("server", globalConfig.ServerSetting)
-	mapTo("database", globalConfig.DatabaseSetting)
-	mapTo("redis", globalConfig.RedisSetting)
+	mapTo("app", &globalConfig.AppSetting)
+	mapTo("server", &globalConfig.ServerSetting)
+	mapTo("database", &globalConfig.DatabaseSetting)
+	mapTo("redis", &globalConfig.RedisSetting)
 
 	globalConfig.RedisSetting.IdleTimeout *= time.Second
 }
