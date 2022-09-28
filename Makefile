@@ -3,7 +3,7 @@
 all: build
 
 build:
-	@go build -v .
+	@go build -o phoenix_server ./src/main.go
 
 tool:
 	go vet ./...; true
@@ -13,7 +13,7 @@ lint:
 	golint ./...
 
 clean:
-	rm -rf github.com/lucky-cheerful-man/phoenix_server
+	rm -rf phoenix_server
 	go clean -i .
 
 help:

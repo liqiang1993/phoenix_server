@@ -1,7 +1,7 @@
 package util
 
 import (
-	"crypto/md5" //nolint:gosec
+	"crypto/md5"
 	"encoding/hex"
 )
 

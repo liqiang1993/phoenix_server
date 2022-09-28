@@ -1,4 +1,4 @@
-package setting
+package config
 
 import (
 	"fmt"
@@ -61,9 +61,9 @@ var globalConfig *GlobalConfig
 func init() {
 	var err error
 	globalConfig = new(GlobalConfig)
-	globalConfig.cfg, err = ini.Load("conf/app.ini")
+	globalConfig.cfg, err = ini.Load("/Users/qiang.lilq/constant/go/src/phoenix_server/localconf/app.ini")
 	if err != nil {
-		fmt.Printf("setting.Setup, fail to parse 'conf/app.ini': %s", err)
+		fmt.Printf("config.Setup, fail to parse 'localconf/app.ini': %s", err)
 		panic("load config failed")
 	}
 

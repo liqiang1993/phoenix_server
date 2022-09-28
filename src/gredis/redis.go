@@ -1,8 +1,8 @@
 package gredis
 
 import (
-	"github.com/lucky-cheerful-man/phoenix_server/pkg/log"
-	"github.com/lucky-cheerful-man/phoenix_server/pkg/setting"
+	"github.com/lucky-cheerful-man/phoenix_server/src/config"
+	"github.com/lucky-cheerful-man/phoenix_server/src/log"
 
 	"time"
 
@@ -19,16 +19,16 @@ type CacheInterface interface {
 func Setup() *RedisOperate {
 	op := new(RedisOperate)
 	Conn := &redis.Pool{
-		MaxIdle:     setting.ReferGlobalConfig().RedisSetting.MaxIdle,
-		MaxActive:   setting.ReferGlobalConfig().RedisSetting.MaxActive,
-		IdleTimeout: setting.ReferGlobalConfig().RedisSetting.IdleTimeout,
+		MaxIdle:     config.ReferGlobalConfig().RedisSetting.MaxIdle,
+		MaxActive:   config.ReferGlobalConfig().RedisSetting.MaxActive,
+		IdleTimeout: config.ReferGlobalConfig().RedisSetting.IdleTimeout,
 		Dial: func() (redis.Conn, error) {
-			c, err := redis.Dial("tcp", setting.ReferGlobalConfig().RedisSetting.Host)
+			c, err := redis.Dial("tcp", config.ReferGlobalConfig().RedisSetting.Host)
 			if err != nil {
 				return nil, err
 			}
-			if setting.ReferGlobalConfig().RedisSetting.Password != "" {
-				if _, err := c.Do("AUTH", setting.ReferGlobalConfig().RedisSetting.Password); err != nil {
+			if config.ReferGlobalConfig().RedisSetting.Password != "" {
+				if _, err := c.Do("AUTH", config.ReferGlobalConfig().RedisSetting.Password); err != nil {
 					_ = c.Close()
 					return nil, err
 				}
@@ -56,7 +56,7 @@ func (r *RedisOperate) Set(key string, value []byte, time int) error {
 	defer func() {
 		err := conn.Close()
 		if err != nil {
-			log.Warnf("close redis conn failed:%s", err)
+			log.Warn("close redis conn failed:%s", err)
 		}
 	}()
 
@@ -79,7 +79,7 @@ func (r *RedisOperate) Get(key string) ([]byte, error) {
 	defer func() {
 		err := conn.Close()
 		if err != nil {
-			log.Warnf("close redis conn failed:%s", err)
+			log.Warn("close redis conn failed:%s", err)
 		}
 	}()
 
@@ -97,7 +97,7 @@ func (r *RedisOperate) Delete(key string) (bool, error) {
 	defer func() {
 		err := conn.Close()
 		if err != nil {
-			log.Warnf("close redis conn failed:%s", err)
+			log.Warn("close redis conn failed:%s", err)
 		}
 	}()
 

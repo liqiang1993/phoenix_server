@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
-	"github.com/lucky-cheerful-man/phoenix_server/pkg/log"
-	"github.com/lucky-cheerful-man/phoenix_server/pkg/setting"
+	"github.com/lucky-cheerful-man/phoenix_server/src/config"
+	"github.com/lucky-cheerful-man/phoenix_server/src/log"
 	"time"
 )
 
@@ -13,25 +13,25 @@ import (
 func Setup() *Mysql {
 	var MysqlOperate Mysql
 
-	db, err := gorm.Open(setting.ReferGlobalConfig().DatabaseSetting.Type, fmt.Sprintf(
+	db, err := gorm.Open(config.ReferGlobalConfig().DatabaseSetting.Type, fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		setting.ReferGlobalConfig().DatabaseSetting.User,
-		setting.ReferGlobalConfig().DatabaseSetting.Password,
-		setting.ReferGlobalConfig().DatabaseSetting.Host,
-		setting.ReferGlobalConfig().DatabaseSetting.Name))
+		config.ReferGlobalConfig().DatabaseSetting.User,
+		config.ReferGlobalConfig().DatabaseSetting.Password,
+		config.ReferGlobalConfig().DatabaseSetting.Host,
+		config.ReferGlobalConfig().DatabaseSetting.Name))
 
 	if err != nil {
-		log.Fatalf("gmysql.Setup err: %s", err)
+		log.Error("mysql.Setup err: %s", err)
 	}
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
-		return setting.ReferGlobalConfig().DatabaseSetting.TablePrefix + defaultTableName
+		return config.ReferGlobalConfig().DatabaseSetting.TablePrefix + defaultTableName
 	}
 
 	db.SingularTable(true)
-	db.DB().SetMaxIdleConns(setting.ReferGlobalConfig().DatabaseSetting.MaxIdleConn)
-	db.DB().SetMaxOpenConns(setting.ReferGlobalConfig().DatabaseSetting.MaxOpenConn)
-	db.DB().SetConnMaxLifetime(time.Minute * time.Duration(setting.ReferGlobalConfig().DatabaseSetting.ConnMaxLifeMinute))
+	db.DB().SetMaxIdleConns(config.ReferGlobalConfig().DatabaseSetting.MaxIdleConn)
+	db.DB().SetMaxOpenConns(config.ReferGlobalConfig().DatabaseSetting.MaxOpenConn)
+	db.DB().SetConnMaxLifetime(time.Minute * time.Duration(config.ReferGlobalConfig().DatabaseSetting.ConnMaxLifeMinute))
 	MysqlOperate.db = db
 
 	return &MysqlOperate
@@ -84,7 +84,7 @@ func (m *Mysql) GetProfile(name string) (string, string, error) {
 	if len(auth.NickName) > 0 {
 		return auth.NickName, auth.Image, nil
 	} else {
-		log.Warnf("can not find valid profile info by name:%s", name)
+		log.Warn("can not find valid profile info by name:%s", name)
 		return "", "", errors.New("not found")
 	}
 }
