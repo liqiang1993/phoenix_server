@@ -15,9 +15,11 @@ type CacheInterface interface {
 	Delete(key string) (bool, error)
 }
 
+var CacheOperate *RedisOperate
+
 // Setup Initialize the Redis instance
-func Setup() *RedisOperate {
-	op := new(RedisOperate)
+func init() {
+	CacheOperate = new(RedisOperate)
 	Conn := &redis.Pool{
 		MaxIdle:     config.ReferGlobalConfig().RedisSetting.MaxIdle,
 		MaxActive:   config.ReferGlobalConfig().RedisSetting.MaxActive,
@@ -41,9 +43,7 @@ func Setup() *RedisOperate {
 		},
 	}
 
-	op.Conn = Conn
-
-	return op
+	CacheOperate.Conn = Conn
 }
 
 type RedisOperate struct {

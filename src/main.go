@@ -5,9 +5,11 @@ import (
 	goMirco "github.com/asim/go-micro/v3"
 	"github.com/asim/go-micro/v3/registry"
 	pb "github.com/lucky-cheerful-man/phoenix_apis/protobuf3.pb/user_info_manage"
+
+	_ "github.com/lucky-cheerful-man/phoenix_server/src/gmysql"
+	_ "github.com/lucky-cheerful-man/phoenix_server/src/gredis"
+
 	"github.com/lucky-cheerful-man/phoenix_server/src/config"
-	"github.com/lucky-cheerful-man/phoenix_server/src/gmysql"
-	"github.com/lucky-cheerful-man/phoenix_server/src/gredis"
 	"github.com/lucky-cheerful-man/phoenix_server/src/log"
 	"github.com/lucky-cheerful-man/phoenix_server/src/service"
 )
@@ -23,8 +25,7 @@ func main() {
 		goMirco.Registry(etcdReg),
 	)
 
-	err := pb.RegisterUserServiceHandler(srv.Server(), &service.UserService{DB: gmysql.Setup(),
-		Cache: gredis.Setup()})
+	err := pb.RegisterUserServiceHandler(srv.Server(), &service.UserService{})
 	if err != nil {
 		log.Error("RegisterUserServiceHandler failed, err:%s", err)
 		return

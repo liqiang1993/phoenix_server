@@ -5,6 +5,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
+	"math/rand"
+	"os"
+	"time"
+
 	pb "github.com/lucky-cheerful-man/phoenix_apis/protobuf3.pb/user_info_manage"
 	"github.com/lucky-cheerful-man/phoenix_server/src/config"
 	"github.com/lucky-cheerful-man/phoenix_server/src/constant"
@@ -12,15 +17,9 @@ import (
 	"github.com/lucky-cheerful-man/phoenix_server/src/gredis"
 	"github.com/lucky-cheerful-man/phoenix_server/src/log"
 	"github.com/lucky-cheerful-man/phoenix_server/src/util"
-	"io/ioutil"
-	"math/rand"
-	"os"
-	"time"
 )
 
 type UserService struct {
-	DB    gmysql.DBInterface
-	Cache gredis.CacheInterface
 }
 
 type UserInfo struct {
@@ -31,7 +30,7 @@ type UserInfo struct {
 // Register 注册接口
 func (u *UserService) Register(_ context.Context, in *pb.RegisterRequest, _ *pb.RegisterResponse) error {
 	password := util.EncodeMD5(in.Password + config.ReferGlobalConfig().AppSetting.Salt)
-	err := u.DB.InsertUser(in.Name, password)
+	err := gmysql.DBOperate.InsertUser(in.Name, password)
 	if err != nil {
 		log.Warn("%s InsertUser failed, err:%s", in.RequestID, err)
 		return errors.New(constant.InsertDBError.Msg)
@@ -46,7 +45,7 @@ func (u *UserService) Register(_ context.Context, in *pb.RegisterRequest, _ *pb.
 // Auth 登陆认证接口
 func (u *UserService) Auth(_ context.Context, in *pb.AuthRequest, out *pb.AuthResponse) error {
 	password := util.EncodeMD5(in.Password + config.ReferGlobalConfig().AppSetting.Salt)
-	res, nickname, imagePath, err := u.DB.CheckAuth(in.Name, password)
+	res, nickname, imagePath, err := gmysql.DBOperate.CheckAuth(in.Name, password)
 	if err != nil || !res {
 		log.Warn("%s CheckAuth failed, err:%s, res:%v", in.RequestID, err, res)
 		return errors.New("auth failed")
@@ -60,7 +59,7 @@ func (u *UserService) Auth(_ context.Context, in *pb.AuthRequest, out *pb.AuthRe
 func (u *UserService) GetProfile(_ context.Context, in *pb.GetProfileRequest, out *pb.GetProfileResponse) error {
 	// 优先从缓存查询
 	userInfoPtr := new(UserInfo)
-	res, err := u.Cache.Get(in.Name)
+	res, err := gredis.CacheOperate.Get(in.Name)
 	if err == nil {
 		err = json.Unmarshal(res, userInfoPtr)
 		if err == nil {
@@ -73,7 +72,7 @@ func (u *UserService) GetProfile(_ context.Context, in *pb.GetProfileRequest, ou
 	log.Info("%s get user info from redis failed:%s, res:%s", in.RequestID, err, res)
 
 	// 缓存中不存在数据时，从db查询
-	nickname, imagePath, err := u.DB.GetProfile(in.Name)
+	nickname, imagePath, err := gmysql.DBOperate.GetProfile(in.Name)
 	if err != nil {
 		log.Warn("%s GetProfile failed, err:%s,", in.RequestID, err)
 		return err
@@ -127,7 +126,7 @@ func (u *UserService) EditProfile(_ context.Context, in *pb.EditProfileRequest, 
 		}
 	}
 
-	err = u.DB.EditProfile(in.Name, imageID, in.Nickname)
+	err = gmysql.DBOperate.EditProfile(in.Name, imageID, in.Nickname)
 	if err != nil {
 		log.Warn("%s EditProfile failed, err:%s", in.RequestID, err)
 		// 更新失败时删除刚存储的图片
@@ -139,7 +138,7 @@ func (u *UserService) EditProfile(_ context.Context, in *pb.EditProfileRequest, 
 	}
 
 	// 删除缓存中的内容
-	_, err = u.Cache.Delete(in.Name)
+	_, err = gredis.CacheOperate.Delete(in.Name)
 	if err != nil {
 		log.Warn("%s delete cache failed:%s", in.RequestID, err)
 	}
@@ -154,7 +153,7 @@ func (u *UserService) setCacheInfo(requestID string, name string, nickname strin
 	}
 	res, err := json.Marshal(userInfo)
 	if err == nil {
-		err = u.Cache.Set(name, res, config.ReferGlobalConfig().RedisSetting.ExpireTimeSecond)
+		err = gredis.CacheOperate.Set(name, res, config.ReferGlobalConfig().RedisSetting.ExpireTimeSecond)
 		if err != nil {
 			log.Warn("%s set cache failed:%s, name:%s, res:%s", requestID, err, name, string(res))
 		}

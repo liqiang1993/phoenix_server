@@ -3,15 +3,18 @@ package gmysql
 import (
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/jinzhu/gorm"
 	"github.com/lucky-cheerful-man/phoenix_server/src/config"
 	"github.com/lucky-cheerful-man/phoenix_server/src/log"
-	"time"
 )
 
+var DBOperate *Mysql
+
 // Setup initializes the database instance
-func Setup() *Mysql {
-	var MysqlOperate Mysql
+func init() {
+	DBOperate = new(Mysql)
 
 	db, err := gorm.Open(config.ReferGlobalConfig().DatabaseSetting.Type, fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
@@ -32,9 +35,7 @@ func Setup() *Mysql {
 	db.DB().SetMaxIdleConns(config.ReferGlobalConfig().DatabaseSetting.MaxIdleConn)
 	db.DB().SetMaxOpenConns(config.ReferGlobalConfig().DatabaseSetting.MaxOpenConn)
 	db.DB().SetConnMaxLifetime(time.Minute * time.Duration(config.ReferGlobalConfig().DatabaseSetting.ConnMaxLifeMinute))
-	MysqlOperate.db = db
-
-	return &MysqlOperate
+	DBOperate.db = db
 }
 
 type Mysql struct {
