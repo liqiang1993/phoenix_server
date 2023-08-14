@@ -189,7 +189,7 @@ github.com/jinzhu/gorm/dialects/mysql
 github.com/jinzhu/inflection
 # github.com/kevinburke/ssh_config v0.0.0-20201106050909-4977a11b4351
 github.com/kevinburke/ssh_config
-# github.com/lucky-cheerful-man/phoenix_apis v1.0.1-0.20220916110921-4bfc65f60dc2
+# github.com/lucky-cheerful-man/phoenix_apis v1.0.1
 ## explicit
 github.com/lucky-cheerful-man/phoenix_apis/protobuf3.pb/user_info_manage
 # github.com/miekg/dns v1.1.43
