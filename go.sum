@@ -431,8 +431,8 @@ github.com/liquidweb/go-lwApi v0.0.5/go.mod h1:0sYF9rMXb0vlG+4SzdiGMXHheCZxjguMq
 github.com/liquidweb/liquidweb-cli v0.6.9/go.mod h1:cE1uvQ+x24NGUL75D0QagOFCG8Wdvmwu8aL9TLmA/eQ=
 github.com/liquidweb/liquidweb-go v1.6.3/go.mod h1:SuXXp+thr28LnjEw18AYtWwIbWMHSUiajPQs8T9c/Rc=
 github.com/lucas-clemente/quic-go v0.12.0/go.mod h1:UXJJPE4RfFef/xPO5wQm0tITK8gNfqwTxjbE7s3Vb8s=
-github.com/lucky-cheerful-man/phoenix_apis v1.0.1 h1:TLHWAUdufkAB5/nuC5LAD6/N+EMNnuZshhS5rIT6tG8=
-github.com/lucky-cheerful-man/phoenix_apis v1.0.1/go.mod h1:faZAuBgIUO0YqspGaHR2FzaLVhBCjpYIA/VFZ8tpop8=
+github.com/lucky-cheerful-man/phoenix_apis v1.0.2 h1:iDFqrCq8x4wDuJaEqoNzYDfIOim+U6XWXZ1qtN14n1g=
+github.com/lucky-cheerful-man/phoenix_apis v1.0.2/go.mod h1:faZAuBgIUO0YqspGaHR2FzaLVhBCjpYIA/VFZ8tpop8=
 github.com/m3o/m3o-go/client v0.0.0-20210421144725-8bfd7992ada3/go.mod h1:vmeaYrKYpgVNhny/l7iH8mXS88S7ijUiYni3gZUrCq0=
 github.com/magiconair/properties v1.8.1/go.mod h1:PppfXfuXeibc/6YijjN8zIbojt8czPbwD3XqdrwzmxQ=
 github.com/magiconair/properties v1.8.4/go.mod h1:y3VJvCyxH9uVvJTWEGAELF3aiYNyPKd5NZ3oSwXrF60=

@@ -6,13 +6,6 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-type DBInterface interface {
-	InsertUser(name, password string) error
-	CheckAuth(username, password string) (bool, string, string, error)
-	GetProfile(name string) (string, string, error)
-	EditProfile(name, path, nickname string) error
-}
-
 type UserInfoTab struct {
 	Id          int64     `json:"id"`
 	UserName    string    `json:"user_name"`
