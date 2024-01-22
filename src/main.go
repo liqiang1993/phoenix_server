@@ -42,4 +42,5 @@ func main() {
 	if err != nil {
 		log.Error("run failed, err:%s", err)
 	}
+	log.Info("")
 }

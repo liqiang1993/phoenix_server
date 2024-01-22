@@ -24,6 +24,7 @@ func init() {
 
 	if err != nil {
 		log.Error("mysql.Setup err: %s", err)
+		//panic(errors.New("mysql.Setup err"))
 	}
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
@@ -34,6 +35,9 @@ func init() {
 	db.DB().SetMaxIdleConns(config.ReferGlobalConfig().DatabaseSetting.MaxIdleConn)
 	db.DB().SetMaxOpenConns(config.ReferGlobalConfig().DatabaseSetting.MaxOpenConn)
 	db.DB().SetConnMaxLifetime(time.Minute * time.Duration(config.ReferGlobalConfig().DatabaseSetting.ConnMaxLifeMinute))
+
+	log.Info("init mysql success!")
+
 	DBOperate.db = db
 }
 

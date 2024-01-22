@@ -1,9 +1,7 @@
-FROM golang:latest
+FROM golang:alpine
 
-ENV GOPROXY https://goproxy.cn,direct
-WORKDIR $GOPATH/src/dao-server
-COPY . $GOPATH/src/dao-server
-RUN go build .
-
-EXPOSE 9000
-ENTRYPOINT ["./dao-server"]
+RUN mkdir /app
+COPY . /app
+WORKDIR /app
+RUN CGO_ENABLED=0 GOOS=linux go build -o phoenix_server ./src/main.go
+CMD ["./phoenix_server"]
