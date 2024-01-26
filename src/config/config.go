@@ -8,9 +8,8 @@ import (
 )
 
 type App struct {
-	RuntimeRootPath string
-	Salt            string
-	RootPictureDir  string
+	Salt           string
+	RootPictureDir string
 
 	LogLevel      string // 日志文件展示级别
 	LogFileName   string // 日志文件存放路径与名称
@@ -61,10 +60,9 @@ var globalConfig *GlobalConfig
 func init() {
 	var err error
 	globalConfig = new(GlobalConfig)
-	//globalConfig.cfg, err = ini.Load("/Users/qiang.lilq/interesting/go/phoenix_server/localconf/app.ini")
-	globalConfig.cfg, err = ini.Load("/app/localconf/app.ini")
+	globalConfig.cfg, err = ini.Load("/app/local_conf/app.ini")
 	if err != nil {
-		fmt.Printf("config.Setup, fail to parse 'localconf/app.ini': %s", err)
+		fmt.Printf("config.Setup, fail to parse 'local_conf/app.ini': %s", err)
 		panic("load config failed")
 	}
 

@@ -1,6 +1,7 @@
 package gmysql
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
@@ -24,7 +25,7 @@ func init() {
 
 	if err != nil {
 		log.Error("mysql.Setup err: %s", err)
-		//panic(errors.New("mysql.Setup err"))
+		panic(errors.New("mysql.Setup err"))
 	}
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
